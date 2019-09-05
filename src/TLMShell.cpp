@@ -21,7 +21,7 @@
 #include "antlr4-runtime.h"
 #include "CommandLexer.h"
 #include "CommandParser.h"
-#include "ExtendedCommandListener.h"
+//#include "ExtendedCommandListener.h"
 #include "ExtendedVisitor.h"
 
 using namespace std;
@@ -40,7 +40,7 @@ int main() {
 	// Create a lexer which scans the input stream
 	// to create a token stream.
 	CommandLexer lexer(&input);
-	ExtendedCommandListener listener;
+	//ExtendedCommandListener listener;
 	ExtendedVisitor visitor;
 
 	CommonTokenStream tokens(&lexer);
