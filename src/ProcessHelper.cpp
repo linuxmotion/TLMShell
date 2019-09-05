@@ -81,10 +81,13 @@ return true;
 void ProcessHelper::ExecuteCommandArguments(string command, vector<string> cargs) {
 
 
+	log("Executing command " << command )
 	unsigned int size = cargs.size();
+	log("found " << size <<" arguments")
 	// we need an c string array where the first element is the name
 	// of the command
 	char **args = new char*[size + 1];
+
 
 	// put all the arguments into the c string array
 	for(unsigned int i = 0; i < size; i++){
@@ -101,12 +104,12 @@ void ProcessHelper::ExecuteCommandArguments(string command, vector<string> cargs
 	char *buf = new char[256];
 	command.copy(buf, command.size(), 0);
 	//strcpy(buf,command.c_str());
-	args[1] = buf;
-	args[1] = NULL;
+	args[0] = buf;
+	//args[1] = NULL;
 
 
 	const char *commandp = command.c_str(); // convert to c string
-	execvp(commandp,args); // pass both to the exec service
+	int stat = execvp(commandp,args); // pass both to the exec service
 
 
 	//if we reached here there was an error

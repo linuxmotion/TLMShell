@@ -15,19 +15,20 @@ ExtendedVisitor::ExtendedVisitor() {
 antlrcpp::Any ExtendedVisitor::visitCommand(
 		CommandParser::CommandContext* context) {
 
-	cout << "Visiting the initial command" << endl;
-	cout << "command size: " << context->getText() << endl;
-	return visitChildren(context);
+	log("Visiting the initial command");
+	log("command size: " << context->children.size() );
+	log("command name: " << context->getText() );
+	//visit(context);
+	visitChildren(context);
+	return 0;
 
-	//return 1;
 }
-#include <string>
 
 antlrcpp::Any ExtendedVisitor::visitPipe_sequence(
 		CommandParser::Pipe_sequenceContext* context) {
 
 
-	cout << "Visiting a pipe sequence" << endl;
+	log("Visiting a pipe sequence");
 	int size = context->children.size();
 	// in the pipe seqeunce we have three parts
 	// LHS = program1
@@ -70,7 +71,16 @@ antlrcpp::Any ExtendedVisitor::visitNew_program_sequence(
 antlrcpp::Any ExtendedVisitor::visitComplex_command(
 		CommandParser::Complex_commandContext* context) {
 
+	log("Starting a complex command");
 	vector<string> arguments;
+
+	// check to see if we are a single command
+	if(context->children.size() == 1){
+		// if we are just visit it
+		visitChildren(context);
+		return 0;
+	}
+
 
 	// get the command name
 	string command = context->command_name()->getText();
@@ -94,10 +104,10 @@ antlrcpp::Any ExtendedVisitor::visitSimple_command(
 
 	// Here we would just fork and and execute our command
 
-	cout << "Visiting a simple command" << endl;
+	log("Visiting a simple command");
 
 	// We got the text of the command to execute
-	string command = context->children[0]->getText() ;
+	string command = context->command_name()->getText() ;
 
 	ProcessHelper helper;
 	helper.ForkAndExecuteCommand(command, true);
@@ -111,9 +121,9 @@ antlrcpp::Any ExtendedVisitor::visitCommand_name(
 
 
 
-	cout << "Visiting a command name" << endl;
+	log( "Visiting a command name");
 	//cout << "command size: " << context->children.size() << endl;
-	cout << "Name of command: " << context->getText() << endl;
+	log("Name of command: " << context->getText() );
 	visitChildren(context);
 	antlrcpp::Any text(context->getText());
 	return text;
@@ -123,9 +133,9 @@ antlrcpp::Any ExtendedVisitor::visitCommand_flags(
 		CommandParser::Command_flagsContext* context) {
 
 
-	cout << "Visiting command flags" << endl;
+	log("Visiting command flags");
 	//cout << "command size: " << context->children.size() << endl;
-	cout << context->getText() << endl;
+	log(context->getText());
 	visitChildren(context);
 
 	return context->getText();

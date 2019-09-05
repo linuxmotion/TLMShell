@@ -31,12 +31,7 @@ int Shell::StartShell() {
 
 	CommonTokenStream tokens(&lexer);
 
-	// Print the token stream.
-	cout << "Tokens:" << endl;
-	tokens.fill();
-	for (Token *token : tokens.getTokens()) {
-		std::cout << token->toString() << std::endl;
-	}
+
 	// Create a parser which parses the token stream
 	// to create a parse tree.
 	CommandParser parser(&tokens);
@@ -47,8 +42,8 @@ int Shell::StartShell() {
 	//cout << endl << tree->getText() << endl;
 
 	// Print the parse tree in Lisp format.
-	cout << endl << "Parse tree (Lisp format):" << endl;
-	std::cout << tree->toStringTree(&parser) << endl;
+	//cout << endl << "Parse tree (Lisp format):" << endl;
+	//std::cout << tree->toStringTree(&parser) << endl;
 
 
 }
