@@ -70,27 +70,22 @@ antlrcpp::Any ExtendedVisitor::visitNew_program_sequence(
 antlrcpp::Any ExtendedVisitor::visitComplex_command(
 		CommandParser::Complex_commandContext* context) {
 
-	// here we need to fork and execute. but first we must gather our arguments
+	vector<string> arguments;
 
-	//cout << "Visiting a complex command" << endl;
-	//
+	// get the command name
 	string command = context->command_name()->getText();
-	cout << context->children.size() << endl ;
-
+	//cout << context->children.size() << endl ;
+	// here we need to fork and execute. but first we must gather our arguments
+	log("command: " << command << " found")
 	// the first child in the current context is actually the command name
 	// so only loop to the children size -1
-	for(int i = 0; i < (context->children.size()-1); i++){
-		cout << "command #" << i << " " << context->command_flags(i)->getText() << endl;
+	for(unsigned int i = 0; i < (context->children.size()-1); i++){
+		arguments.push_back(context->command_flags(i)->getText());
+		log("argument #" << i << " " << context->command_flags(i)->getText() );
 	}
-	//context->command_flags(0);
 
-	//visitCommand_name(context->command_name());
-	//visitCommand_flags(context->command_flags());
-
-	//string command = context->co;
-	cout << command << endl;
-	//context->
-	//visitChildren(context);
+	ProcessHelper helper;
+	helper.ForkAndExecuteCommand(command, arguments,true);
 	return NULL;
 }
 
@@ -105,7 +100,7 @@ antlrcpp::Any ExtendedVisitor::visitSimple_command(
 	string command = context->children[0]->getText() ;
 
 	ProcessHelper helper;
-	helper.ForkAndExecuteSingleCommand(command, true);
+	helper.ForkAndExecuteCommand(command, true);
 
 
 	return NULL;

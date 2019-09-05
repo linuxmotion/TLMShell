@@ -13,23 +13,11 @@ ProcessHelper::ProcessHelper() {
 
 }
 
-
-void ProcessHelper::ExecuteChildCommand(string command) {
-	// i am in the child process
-
-	vector<string> cargs(0);
-	this->ForkAndExecuteCommandArguments(command, cargs);
-}
-
+/**
+ * Executes the command in the child process.
+ */
 bool ProcessHelper::ParentExecutionAfterFork(pid_t pid, bool wait) {
-	;
-	/**
-	 * if somewhere there is a &
-	 * ie. command -flags &
-	 * the the parent should not wait on the child
-	 *
-	 */
-	//bool wait = true;
+
 	log("Parent execution after fork started");
 
 	if (wait) {
@@ -52,17 +40,18 @@ bool ProcessHelper::ParentExecutionAfterFork(pid_t pid, bool wait) {
 
 	} log("Parent execution after fork finished successfully");
 
-	//return true;
+	return true;
 }
+
 
 /**
  * Finishes execution of the parent process
  * after it has been forked. If Tokes contains
  * an & the the parent process will not wait.
- * Return true on success and false on failure
+ * Return true on success and exit on failure
  *
  */
-bool ProcessHelper::ForkAndExecuteSingleCommand(string command, bool wait) {
+bool ProcessHelper::ForkAndExecuteCommand(string command, vector<string> cargs, bool wait) {
 
 	pid_t pid = fork();
 
@@ -76,7 +65,8 @@ bool ProcessHelper::ForkAndExecuteSingleCommand(string command, bool wait) {
 	}
 	else if(pid == 0){
 		// i am in the child process
-		ExecuteChildCommand(command);
+		ExecuteCommandArguments(command, cargs);
+		//ExecuteChildCommand(command);
 	}else{
 
 		perror("An unhandled error has occurred");
@@ -84,28 +74,20 @@ bool ProcessHelper::ForkAndExecuteSingleCommand(string command, bool wait) {
 		exit(EXIT_FAILURE);// and error accured
 	}
 
-
-
-
-
-
-
-
-
-
+return true;
 
 }
 
-void ProcessHelper::ForkAndExecuteCommandArguments(std::string command, vector<string> cargs) {
+void ProcessHelper::ExecuteCommandArguments(string command, vector<string> cargs) {
 
 
-	int size = cargs.size();
+	unsigned int size = cargs.size();
 	// we need an c string array where the first element is the name
 	// of the command
 	char **args = new char*[size + 1];
 
 	// put all the arguments into the c string array
-	for(int i = 0; i < size; i++){
+	for(unsigned int i = 0; i < size; i++){
 			// copy the 0 to size-1 strings from our command arguments array
 			// into the arguments array from 1 to size of our arguments list
 			// copy all characters
@@ -124,9 +106,12 @@ void ProcessHelper::ForkAndExecuteCommandArguments(std::string command, vector<s
 
 
 	const char *commandp = command.c_str(); // convert to c string
-	int status = execvp(commandp,args); // pass both to the exec service
+	execvp(commandp,args); // pass both to the exec service
+
+
 	//if we reached here there was an error
 	delete args;
+	perror("Executing the command with the child process failed");
 	exit(EXIT_FAILURE);
 }
 
@@ -134,3 +119,8 @@ ProcessHelper::~ProcessHelper() {
 	// TODO Auto-generated destructor stub
 }
 
+// Returns true in the parent thread if the child thread was
+// created successfully, Exits in the child process
+bool ProcessHelper::ForkAndExecuteCommand(string command, bool wait) {
+	return ForkAndExecuteCommand(command, vector<string>(0), wait);
+}

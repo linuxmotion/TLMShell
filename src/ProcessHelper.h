@@ -22,11 +22,12 @@ public:
 	ProcessHelper();
 
 	bool ForkAndExecuteSingleCommand(string command, bool wait);
-	void ForkAndExecuteCommandArguments(string command, vector<string> cargs);
-	virtual ~ProcessHelper();
-	void ExecuteChildCommand(string);
-private:
+	bool ForkAndExecuteCommand(string command, bool wait);
+	bool ForkAndExecuteCommand(string command, vector<string> cargs, bool wait) ;
 
+	virtual ~ProcessHelper();
+private:
+	void ExecuteCommandArguments(string command, vector<string> cargs);
 	bool ParentExecutionAfterFork(pid_t pid, bool should_wait);
 };
 
