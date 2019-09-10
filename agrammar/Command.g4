@@ -32,11 +32,11 @@ complex_command :
 simple_command : 
 		    command_name 
 		; 
-		
 
 
 command_name: WORD;
 command_flags: WORD;
+
 
 
 // Matches any alpha numeric word as well as any word preceded
@@ -58,6 +58,10 @@ AMPERSAND : '&' ;
 // or if used as || to denote the use of a conditional execution
 PIPE : '|';
 
+
+LS : 'ls' ;
+CD : 'cd' ;
+EXIT_NAME : 'exit' ;
 
 WS 
  : [ \t\r\n]+ -> skip // skip spaces, tabs, newlines

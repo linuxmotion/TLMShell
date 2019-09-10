@@ -9,14 +9,16 @@
 #define SHELLUTILS_H_
 #include <iostream>
 #include <string>
-#include <string.h>
+#include <vector>
 
 using std::cout;
 using std::endl;
 using std::cerr;
 using std::string;
+using std::vector;
+
 // Comment this out to disable debuging
-//#define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
 
@@ -32,12 +34,20 @@ class ShellUtils {
 public:
 	ShellUtils();
 	virtual ~ShellUtils();
+	bool isInternalCommand(string command);
+	void executeInternalCommand(string command);
+	bool ContinueRunningShell;
 
 protected:
-	char mCurrentDir[1024];
-	static const int BUFFER_SIZE = 288;
+
+	static const int BUFFER_SIZE = 256;
+	char mCurrentDir[BUFFER_SIZE];
+	vector<string> INTERNAL_COMMANDS;
 	string handleDotandTilde(const string commandToken, char cwd[]);
 	string inline tildeExpansion();
+
+
+
 	//void callCD(char* cwd, vector<string> tokens);
 };
 

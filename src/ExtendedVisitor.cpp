@@ -9,16 +9,17 @@
 
 ExtendedVisitor::ExtendedVisitor() {
 	// TODO Auto-generated constructor stub
-
 }
 
 antlrcpp::Any ExtendedVisitor::visitCommand(
 		CommandParser::CommandContext* context) {
 
-	log("Visiting the initial command"); log("command size: " << context->children.size() ); log("command name: " << context->getText() );
+	log("Visiting the initial command");
+	log("command size: " << context->children.size() );
+	log("command name: " << context->getText() );
 	//visit(context);
-	visitChildren(context);
-	return 0;
+	return visitChildren(context);
+
 
 }
 
@@ -50,7 +51,7 @@ antlrcpp::Any ExtendedVisitor::visitPipe_sequence(
 		return visitChildren(context);
 	}
 
-	return NULL;
+	return 0;
 
 }
 
@@ -60,14 +61,17 @@ antlrcpp::Any ExtendedVisitor::visitNew_program_sequence(
 	cout << "Visiting a new program sequence" << endl;
 	cout << "command size: " << context->children.size() << endl;
 	visitChildren(context);
-	return NULL;
+	return 0;
 }
+
 
 antlrcpp::Any ExtendedVisitor::visitComplex_command(
 		CommandParser::Complex_commandContext* context) {
 
 	log("Starting a complex command");
 	vector<string> arguments;
+
+
 
 	// check to see if we are a single command
 	if (context->children.size() == 1) {
@@ -78,9 +82,19 @@ antlrcpp::Any ExtendedVisitor::visitComplex_command(
 
 	// get the command name
 	string command = context->command_name()->getText();
-	//cout << context->children.size() << endl ;
-	// here we need to fork and execute. but first we must gather our arguments
 	log("command: " << command << " found")
+
+	// check to see if command is one of the internal commands
+	if(Utilities.isInternalCommand(command)){
+		Utilities.executeInternalCommand(command);
+
+		return 0;
+	}
+
+
+
+	// here we need to fork and execute. but first we must gather our arguments
+
 	// the first child in the current context is actually the command name
 	// so only loop to the children size -1
 	for (unsigned int i = 0; i < (context->children.size() - 1); i++) {
@@ -102,6 +116,19 @@ antlrcpp::Any ExtendedVisitor::visitSimple_command(
 
 	// We got the text of the command to execute
 	string command = context->command_name()->getText();
+
+	// check to see if command is one of the internal commands
+	if(Utilities.isInternalCommand(command)){
+
+		Utilities.executeInternalCommand(command);
+		return 0;
+	}
+
+
+	// if it is execute the internal command instead of forking
+
+	// else fork and execute
+
 
 	ProcessHelper helper;
 	helper.ForkAndExecuteCommand(command, true);
@@ -129,6 +156,11 @@ antlrcpp::Any ExtendedVisitor::visitCommand_flags(
 	visitChildren(context);
 
 	return context->getText();
+}
+
+bool ExtendedVisitor::continueVisiting() {
+
+	return Utilities.ContinueRunningShell;
 }
 
 ExtendedVisitor::~ExtendedVisitor() {

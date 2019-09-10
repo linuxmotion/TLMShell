@@ -62,9 +62,7 @@ bool ProcessHelper::ForkAndExecuteCommand(string command, vector<string> cargs, 
 
 		ParentExecutionAfterFork(pid, wait);
 		//i am in the parent process
-	}
-
-	else if(pid == 0){
+	}else if(pid == 0){
 		// i am in the child process
 		ExecuteCommandArguments(command, cargs);
 

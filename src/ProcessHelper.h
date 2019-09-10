@@ -11,11 +11,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include <vector>
 
 #include "ShellUtils.h"
 
-using std::vector;
 
 class ProcessHelper {
 public:
