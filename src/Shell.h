@@ -22,7 +22,7 @@ using namespace antlr4;
 class Shell {
 public:
 	Shell();
-	int StartShell();
+	static int StartShell();
 	virtual ~Shell();
 };
 

@@ -9,13 +9,14 @@
 #define SHELLUTILS_H_
 #include <iostream>
 #include <string>
+#include <string.h>
 
 using std::cout;
 using std::endl;
 using std::cerr;
 using std::string;
 // Comment this out to disable debuging
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 

@@ -63,10 +63,11 @@ bool ProcessHelper::ForkAndExecuteCommand(string command, vector<string> cargs, 
 		ParentExecutionAfterFork(pid, wait);
 		//i am in the parent process
 	}
+
 	else if(pid == 0){
 		// i am in the child process
 		ExecuteCommandArguments(command, cargs);
-		//ExecuteChildCommand(command);
+
 	}else{
 
 		perror("An unhandled error has occurred");
@@ -85,23 +86,24 @@ void ProcessHelper::ExecuteCommandArguments(string command, vector<string> cargs
 	unsigned int size = cargs.size();
 	log("found " << size <<" arguments")
 	// we need an c string array where the first element is the name
-	// of the command
-	char **args = new char*[size + 1];
-
+	// of the command and the last element is NULL
+	char **args = new char*[size + 2];
+	args[size+1] = 0; // Null the last argument
 
 	// put all the arguments into the c string array
 	for(unsigned int i = 0; i < size; i++){
 			// copy the 0 to size-1 strings from our command arguments array
 			// into the arguments array from 1 to size of our arguments list
 			// copy all characters
+			args[i+1]  = new char[25];
+			cargs[i].push_back('\0'); // null terminate string
 			cargs[i].copy(args[i+1], cargs[i].size(), 0);
 	}
 
 
-	//char **args = new char*[2];
-	//command += "\0"; // add on a null terminator
 
 	char *buf = new char[256];
+	command.push_back('\0'); // null terminate string
 	command.copy(buf, command.size(), 0);
 	//strcpy(buf,command.c_str());
 	args[0] = buf;
@@ -109,7 +111,7 @@ void ProcessHelper::ExecuteCommandArguments(string command, vector<string> cargs
 
 
 	const char *commandp = command.c_str(); // convert to c string
-	int stat = execvp(commandp,args); // pass both to the exec service
+	int stat = execvp(args[0],args); // pass both to the exec service
 
 
 	//if we reached here there was an error
