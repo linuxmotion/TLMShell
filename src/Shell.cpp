@@ -23,10 +23,14 @@ int Shell::StartShell() {
 	CommonTokenStream tokens(&lexer);
 	CommandParser parser(&tokens);
 	ExtendedVisitor visitor;
+	char* p = getenv("PS1");
+	string prompt;
+	prompt = "~/ $";//prompt.assign(p);
+
 
 	do{
 
-		cout << "~/ $ " ;
+		cout << prompt ;
 		in = "";
 		ins.clear();
 		getline(cin, in);

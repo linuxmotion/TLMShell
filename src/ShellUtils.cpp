@@ -20,46 +20,39 @@ ShellUtils::ShellUtils() {
 
 }
 
-bool ShellUtils::isInternalCommand(string command) {
+int ShellUtils::getInternalCommand(string command) {
 
 	for (unsigned int i = 0; i < INTERNAL_COMMANDS.size(); i++) {
 		if (command.compare(INTERNAL_COMMANDS[i]) == 0)
-			return true;
+			return i;
 	}
-	return false;
+	return -1;
 }
 
-void ShellUtils::executeInternalCommand(string command) {
+bool ShellUtils::executeInternalCommand(string command) {
 
-	int pos = -1;
-	for (unsigned int i = 0; i < INTERNAL_COMMANDS.size(); i++) {
-		if (command == INTERNAL_COMMANDS[i]) {
-			pos = i;
-			break;
-		}
-	}
+	int com = getInternalCommand(command);
 
-	switch (pos) {
+	switch (com) {
 
 		case CD: {
 			log("used internal cd command");
 			break;
-		}
-		;
+		};
 		case EXIT: {
 
 			log("used internal exit command");
 			this->ContinueRunningShell = false;
 			break;
-		}
+		};
 		default: {
-			return;
-		}
-		;
+			log("No command found, going to try and launch external command")
+			return false;
+		};
 
 	};
 
-	return;
+	return true;
 }
 
 ShellUtils::~ShellUtils() {

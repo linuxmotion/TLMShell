@@ -34,12 +34,12 @@ class ShellUtils {
 public:
 	ShellUtils();
 	virtual ~ShellUtils();
-	bool isInternalCommand(string command);
-	void executeInternalCommand(string command);
+	bool executeInternalCommand(string command);
 	bool ContinueRunningShell;
 
 protected:
 
+	int getInternalCommand(string command);
 	static const int BUFFER_SIZE = 256;
 	char mCurrentDir[BUFFER_SIZE];
 	vector<string> INTERNAL_COMMANDS;

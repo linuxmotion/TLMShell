@@ -46,8 +46,7 @@ bool ProcessHelper::ParentExecutionAfterFork(pid_t pid, bool wait) {
 
 /**
  * Finishes execution of the parent process
- * after it has been forked. If Tokes contains
- * an & the the parent process will not wait.
+ * after it has been forked.
  * Return true on success and exit on failure
  *
  */

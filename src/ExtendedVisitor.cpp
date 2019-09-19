@@ -51,7 +51,7 @@ antlrcpp::Any ExtendedVisitor::visitPipe_sequence(
 		return visitChildren(context);
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 
 }
 
@@ -61,7 +61,7 @@ antlrcpp::Any ExtendedVisitor::visitNew_program_sequence(
 	cout << "Visiting a new program sequence" << endl;
 	cout << "command size: " << context->children.size() << endl;
 	visitChildren(context);
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 
@@ -77,19 +77,16 @@ antlrcpp::Any ExtendedVisitor::visitComplex_command(
 	if (context->children.size() == 1) {
 		// if we are just visit it
 		visitChildren(context);
-		return 0;
+		return EXIT_SUCCESS;
 	}
 
 	// get the command name
 	string command = context->command_name()->getText();
 	log("command: " << command << " found")
 
-	// check to see if command is one of the internal commands
-	if(Utilities.isInternalCommand(command)){
-		Utilities.executeInternalCommand(command);
-
-		return 0;
-	}
+	// execute one of the internal command if it present
+	if (Utilities.executeInternalCommand(command))
+		return EXIT_SUCCESS;
 
 
 
@@ -104,7 +101,8 @@ antlrcpp::Any ExtendedVisitor::visitComplex_command(
 
 	ProcessHelper helper;
 	helper.ForkAndExecuteCommand(command, arguments, true);
-	return NULL;
+
+	return EXIT_SUCCESS;
 }
 
 antlrcpp::Any ExtendedVisitor::visitSimple_command(
@@ -117,12 +115,10 @@ antlrcpp::Any ExtendedVisitor::visitSimple_command(
 	// We got the text of the command to execute
 	string command = context->command_name()->getText();
 
-	// check to see if command is one of the internal commands
-	if(Utilities.isInternalCommand(command)){
+	// execute one of the internal command if it present
+	if (Utilities.executeInternalCommand(command))
+		return EXIT_SUCCESS;
 
-		Utilities.executeInternalCommand(command);
-		return 0;
-	}
 
 
 	// if it is execute the internal command instead of forking
@@ -133,7 +129,7 @@ antlrcpp::Any ExtendedVisitor::visitSimple_command(
 	ProcessHelper helper;
 	helper.ForkAndExecuteCommand(command, true);
 
-	return NULL;
+	return EXIT_SUCCESS;
 }
 
 antlrcpp::Any ExtendedVisitor::visitCommand_name(
