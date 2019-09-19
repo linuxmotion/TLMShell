@@ -16,10 +16,16 @@ ShellUtils::ShellUtils() {
 	INTERNAL_COMMANDS.push_back("exit");
 	ContinueRunningShell = true;
 
-	// TODO Auto-generated constructor stub
 
 }
 
+/*
+ * Takes a string as an argument, where the string
+ * is the name of the command to find internally.
+ * Returns the position of the command in the
+ * internal commands list. Returns -1 if command
+ * cannot be found in the list.
+ */
 int ShellUtils::getInternalCommand(string command) {
 
 	for (unsigned int i = 0; i < INTERNAL_COMMANDS.size(); i++) {
@@ -29,6 +35,13 @@ int ShellUtils::getInternalCommand(string command) {
 	return -1;
 }
 
+/*
+ * Takes a string of the name of the command to execute.
+ * Executes the command internally if it is part of the
+ * internal command list. returns true if a command
+ * was executed and false if an internal command
+ * was not found to execute.
+ */
 bool ShellUtils::executeInternalCommand(string command) {
 
 	int com = getInternalCommand(command);
@@ -56,6 +69,6 @@ bool ShellUtils::executeInternalCommand(string command) {
 }
 
 ShellUtils::~ShellUtils() {
-	// TODO Auto-generated destructor stub
+
 }
 

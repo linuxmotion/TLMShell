@@ -45,10 +45,7 @@ protected:
 	vector<string> INTERNAL_COMMANDS;
 	string handleDotandTilde(const string commandToken, char cwd[]);
 	string inline tildeExpansion();
-
-
-
-	//void callCD(char* cwd, vector<string> tokens);
+	void callCD(char* cwd, char* todir);
 };
 
 #endif /* SHELLUTILS_H_ */

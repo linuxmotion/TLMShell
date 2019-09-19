@@ -15,7 +15,6 @@ Shell::Shell() {
 int Shell::StartShell() {
 
 
-	int runShell = true;
 	string in = "";
 	std::stringstream ins(in);
 	ANTLRInputStream input(ins);
