@@ -8,10 +8,6 @@
 #ifndef PROCESSHELPER_H_
 #define PROCESSHELPER_H_
 
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/wait.h>
-
 #include "ShellUtils.h"
 
 

@@ -82,11 +82,8 @@ antlrcpp::Any ExtendedVisitor::visitComplex_command(
 
 	// get the command name
 	string command = context->command_name()->getText();
-	log("command: " << command << " found")
 
-	// execute one of the internal command if it present
-	if (Utilities.executeInternalCommand(command))
-		return EXIT_SUCCESS;
+	log("command: " << command << " found")
 
 
 
@@ -98,6 +95,15 @@ antlrcpp::Any ExtendedVisitor::visitComplex_command(
 		arguments.push_back(context->command_flags(i)->getText());
 		log("argument #" << i << " " << context->command_flags(i)->getText() );
 	}
+
+	// execute one of the internal command if it present
+	if (Utilities.executeInternalCommand(command, arguments)  && (errno == 0))
+		return EXIT_SUCCESS;
+	else if(errno != 0){
+		cout << command << ": " << strerror(errno) << endl;
+		return EXIT_FAILURE;
+	}
+
 
 	ProcessHelper helper;
 	helper.ForkAndExecuteCommand(command, arguments, true);
@@ -116,8 +122,13 @@ antlrcpp::Any ExtendedVisitor::visitSimple_command(
 	string command = context->command_name()->getText();
 
 	// execute one of the internal command if it present
-	if (Utilities.executeInternalCommand(command))
+	errno = 0;
+	if (Utilities.executeInternalCommand(command) && (errno == 0)  )
 		return EXIT_SUCCESS;
+	else if(errno != 0){
+		cout << "cd: " << strerror(errno);
+		return EXIT_FAILURE;
+	}
 
 
 

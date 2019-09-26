@@ -9,7 +9,14 @@
 #define SHELLUTILS_H_
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <vector>
+#include <unistd.h>
+#include <pwd.h>
+#include <cerrno>
+
+#include <sys/types.h>
+#include <sys/wait.h>
 
 using std::cout;
 using std::endl;
@@ -35,17 +42,27 @@ public:
 	ShellUtils();
 	virtual ~ShellUtils();
 	bool executeInternalCommand(string command);
+	bool executeInternalCommand(string command, vector<string> arguments);
 	bool ContinueRunningShell;
-
+	string static getCWorkingDirectory();
+	string static tildeExpansion();
 protected:
 
-	int getInternalCommand(string command);
-	static const int BUFFER_SIZE = 256;
-	char mCurrentDir[BUFFER_SIZE];
+	// Variables
+	string CurrentDir;
+	const static int BAILOUT = 5;
+	const static int BUFFER_SIZE = 256;
 	vector<string> INTERNAL_COMMANDS;
+
+	//Functions
+	int getInternalCommand(string command);
 	string handleDotandTilde(const string commandToken, char cwd[]);
-	string inline tildeExpansion();
-	void callCD(char* cwd, char* todir);
+
+	string expandDotPath(string path);
+	string expandDoubleDotPath(string path);
+	bool callCD(string dir);
+
+
 };
 
 #endif /* SHELLUTILS_H_ */

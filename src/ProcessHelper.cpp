@@ -107,7 +107,7 @@ void ProcessHelper::ExecuteCommandArguments(string command, vector<string> cargs
 	//args[1] = NULL;
 
 
-	const char *commandp = command.c_str(); // convert to c string
+	//const char *commandp = command.c_str(); // convert to c string
 	int stat = execvp(args[0],args); // pass both to the exec service
 
 

@@ -41,7 +41,7 @@ command_flags: WORD;
 
 // Matches any alpha numeric word as well as any word preceded
 // by the - symbol i.e. flags arguments, and command names
-WORD : '-'?[a-zA-Z0-9]+; 
+WORD : [-./a-zA-Z0-9]+; 
 
 
 // right now we will handle only three symbols
@@ -62,6 +62,7 @@ PIPE : '|';
 LS : 'ls' ;
 CD : 'cd' ;
 EXIT_NAME : 'exit' ;
+
 
 WS 
  : [ \t\r\n]+ -> skip // skip spaces, tabs, newlines

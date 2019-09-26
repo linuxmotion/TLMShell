@@ -24,11 +24,21 @@ int Shell::StartShell() {
 	ExtendedVisitor visitor;
 	char* p = getenv("PS1");
 	string prompt;
-	prompt = "~/ $";//prompt.assign(p);
+	//cout << p << endl;
 
 
 	do{
 
+		prompt = ShellUtils::getCWorkingDirectory();
+		string home = ShellUtils::tildeExpansion();
+		if (prompt.find(home) != std::string::npos){
+			// we found the string
+			int end = home.length();
+			prompt.replace(0,end, "~");
+			// replace the whole thing
+		}
+
+		prompt += " $";
 		cout << prompt ;
 		in = "";
 		ins.clear();

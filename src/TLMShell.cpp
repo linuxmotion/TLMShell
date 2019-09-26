@@ -16,7 +16,6 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
 #include "Shell.h"
 
 int main() {
